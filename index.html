@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" ng-app="sndApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Slice N' Dice</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-beta.1/angular.min.js"></script>
+
+    <script src="js/services/orderStorage.js"></script>
+    <script src="js/controllers/orderCtrl.js"></script>
+
+    <link rel="stylesheet" href="css/snd.css">
+</head>
+
+<body ng-controller="orderCtrl">
+    <div class="demo-layout-transparent mdl-layout mdl-js-layout">
+        <header class="mdl-layout__header mdl-layout__header--transparent">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">Order</span>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation -->
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="">Set Date</a>
+                    <a class="mdl-navigation__link" href="">Set Flavor</a>
+                </nav>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">SND App</span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="">Order</a>
+                <a class="mdl-navigation__link" href="">Expense</a>
+            </nav>
+        </div>
+        <main class="mdl-layout__content">
+            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" id="order-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Pieces</th>
+                        <th>Flavour</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Note</th>
+                        <th>Half Box</th>
+                        <th>Paid</th>
+                        <!-- <th>Taken</th> -->
+                        <th>Operation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <form id="order-form" ng-submit="addOrder()">
+                            <td>
+                                <input placeholder="16:30" ng-model="newOrderTime">
+                            </td>
+                            <td>
+                                <input placeholder="10" ng-model="newOrderPieces">
+                            </td>
+                            <td>
+                                <input placeholder="H/DC,MC/BE" ng-model="newOrderFlavour">
+                            </td>
+                            <td>
+                                <input placeholder="Mr. Monster" ng-model="newOrderName">
+                            </td>
+                            <td>
+                                <input placeholder="0970847007" ng-model="newOrderPhone">
+                            </td>
+                            <td>
+                                <input placeholder="忠孝路183號" ng-model="newOrderAddress">
+                            </td>
+                            <td>
+                                <input placeholder="Note" ng-model="newOrderNote">
+                            </td>
+                            <td>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                                    <input type="checkbox" class="mdl-checkbox__input" ng-model="newOrderHalfBox">
+                                </label>
+                            </td>
+                            <td>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                                    <input type="checkbox" class="mdl-checkbox__input" ng-model="newOrderPaid">
+                                </label>
+                            </td>
+                            <!-- <td>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                                    <input type="checkbox" class="mdl-checkbox__input" ng-model="newOrderTaken">
+                                </label>
+                            </td> -->
+                            <td>
+                                <button class="mdl-button mdl-js-button mdl-button--raised">Add</button>
+                            </td>
+                        </form>
+                    </tr>
+
+                    <tr class="view" ng-repeat="order in orders | orderBy: 'time'">
+                        <td>{{order.time}}</td>
+                        <td>{{order.pieces}}</td>
+                        <td>{{order.pizzaString}}</td>
+                        <td>{{order.name}}</td>
+                        <td>{{order.phone}}</td>
+                        <td>{{order.address}}</td>
+                        <td>{{order.note}}</td>
+                        <td>{{order.halfBox}}</td>
+                        <td>{{order.paid}}</td>
+                        <!-- <td>{{order.taken}}</td> -->
+                        <td>
+                            <button class="mdl-button mdl-js-button mdl-button--raised" ng-click="removeOrder(order)">Remove</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+</body>
+
+</html>

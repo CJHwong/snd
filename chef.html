@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" ng-app="sndApp">
+
+<head>
+    <title>SND Chef Board</title>
+    <link href='https://fonts.googleapis.com/css?family=Orbitron:400,900' rel='stylesheet' type='text/css'>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-beta.1/angular.min.js"></script>
+
+    <script src="js/services/orderStorage.js"></script>
+    <script src="js/controllers/orderCtrl.js"></script>
+
+    <link rel="stylesheet" href="css/snd-chef.css">
+</head>
+
+<body ng-controller="orderCtrl">
+    <div class="order" ng-repeat="order in orders | orderBy : 'time' |filter:{done:false}">
+        <div class="info">
+            <span class="time">{{order.time}}</span>
+            <span class="piece">{{order.pieces}} P</span>
+            <span class="delivery" ng-show="order.address!=''">/D</span>
+            <span class="half-box" ng-show="order.halfBox">/H</span>
+        </div>
+        <div class="flavour">
+            <div class="pizza" ng-repeat="pizza in order.pizzas | filter:{made:false}">
+                <input type="hidden" value="{{pizza.flavour}}" ng-model="flavour">
+                <span ng-click="pizzaMade(order, pizza.flavour)">{{pizza.flavour}}</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

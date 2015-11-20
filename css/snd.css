@@ -1,0 +1,36 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+.mdl-layout__header-row {
+    background-color: #F44336;
+}
+
+.demo-layout-transparent .mdl-layout__header,
+.demo-layout-transparent .mdl-navigation__link,
+.demo-layout-transparent .mdl-layout__drawer-button {
+    color: white;
+}
+
+#order-table {
+    width: 100%;
+}
+
+#order-table tr * {
+    text-align: center;
+}
+
+#order-table thead tr th {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#order-table tbody tr td {
+    padding-bottom: 16px;
+    font-size: 14px;
+}
+
+#order-table tbody tr td input {
+    height: 100%;
+    width: 100%;
+}
