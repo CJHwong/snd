@@ -8,8 +8,8 @@ angular.module('sndApp', [])
 		'use strict';
 
 		return {
-			get: function () {
-				return $http.get('/api/orders');
+			get: function (date) {
+				return $http.get('/api/orders', date);
 			},
 
 			delete: function (order) {

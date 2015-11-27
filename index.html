@@ -30,8 +30,15 @@
                 <div class="mdl-layout-spacer"></div>
                 <!-- Navigation -->
                 <nav class="mdl-navigation">
-                    <a class="mdl-navigation__link" href="">Set Date</a>
-                    <a class="mdl-navigation__link" href="">Set Flavor</a>
+                    <!-- Simple Textfield -->
+                    <form action="#">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="date" style="width: 100px;" ng-model="orderDate">
+                            <label style="width: 100px;" class="mdl-textfield__label" for="date"></label>
+                        </div>
+                    </form>
+
+                    <!-- <a class="mdl-navigation__link" href="">Set Flavor</a> -->
                 </nav>
             </div>
         </header>
@@ -104,7 +111,7 @@
                         </form>
                     </tr>
 
-                    <tr class="view" ng-repeat="order in orders | orderBy: 'time'">
+                    <tr class="view" ng-repeat="order in orders | dateFilter:orderDate | orderBy: 'time'">
                         <td>{{order.time}}</td>
                         <td>{{order.pieces}}</td>
                         <td>{{order.pizzaString}}</td>
