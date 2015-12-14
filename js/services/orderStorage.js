@@ -9,7 +9,7 @@ angular.module('sndApp', [])
 
 		return {
 			get: function (date) {
-				return $http.get('/api/orders', date);
+				return $http({ url: '/api/orders', method: 'GET', params: { date: date } });
 			},
 
 			delete: function (order) {

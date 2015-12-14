@@ -70,7 +70,7 @@
                     <tr>
                         <form id="order-form" ng-submit="addOrder()">
                             <td>
-                                <input placeholder="16:30" ng-model="newOrderTime">
+                                <input placeholder="16:30" ng-model="newOrderTime" ng-keyup="checkTimeFormat($event)">
                             </td>
                             <td>
                                 <input placeholder="10" ng-model="newOrderPieces">
@@ -111,7 +111,7 @@
                         </form>
                     </tr>
 
-                    <tr class="view" ng-repeat="order in orders | dateFilter:orderDate | orderBy: 'time'">
+                    <tr class="view" ng-repeat="order in orders | orderBy: 'time'| dateFilter:orderDate | toArray:false">
                         <td>{{order.time}}</td>
                         <td>{{order.pieces}}</td>
                         <td>{{order.pizzaString}}</td>
@@ -119,8 +119,10 @@
                         <td>{{order.phone}}</td>
                         <td><a target="_blank" href="https://www.google.com.tw/maps/dir/402台中市南區忠孝路183號/{{order.address}}">{{order.address}}</a></td>
                         <td>{{order.note}}</td>
-                        <td>{{order.halfBox}}</td>
-                        <td>{{order.paid}}</td>
+                        <td ng-show="order.halfBox"><img src="css/check.png" style="height:150%;"></td>
+                        <td ng-hide="order.halfBox"></td>
+                        <td ng-show="order.paid"><img src="css/check.png" style="height:150%;"></td>
+                        <td ng-hide="order.paid"></td>
                         <!-- <td>{{order.taken}}</td> -->
                         <td>
                             <button class="mdl-button mdl-js-button mdl-button--raised" ng-click="removeOrder(order)">Remove</button>

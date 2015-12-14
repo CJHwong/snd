@@ -21,13 +21,13 @@ body {
 .time {
     display: block;
     font-family: 'orbitron', sans-serif;
-    font-size: 160px;
+    font-size: 140px;
     font-weight: 900;
 }
 .piece,
 .half-box,
 .delivery {
-    font-size: 80px;
+    font-size: 180px;
     font-family: 'orbitron', sans-serif;
     font-weight: 900;
 }
@@ -37,15 +37,14 @@ body {
     height: 180px;
     display: inline-block;
     /*font-family: 'orbitron', sans-serif;*/
-    font-size: 120px;
+    font-size: 140px;
     margin-left: 48px;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
 }
 .flavour .pizza {
     display: inline-block;
     border-radius: 6px;
-    background-color: #B6B6B6;
     margin: 4px;
     height: 138px;
     color: white;

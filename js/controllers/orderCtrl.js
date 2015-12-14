@@ -2,26 +2,43 @@ var sndApp = angular.module('sndApp');
 
 sndApp.controller('orderCtrl', ['$scope', '$filter', 'orderStorage', function ($scope, $filter, orderStorage) {
     var d = new Date();
-    $scope.orderDate = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
+    $scope.orderDate = d.getFullYear()
+		     + "/" + ((d.getMonth() + 1) < 10 ? '0':'') + (d.getMonth() + 1)
+		     + "/" + (d.getDate() < 10 ? '0':'') + d.getDate();
 
     $scope.orders = {};
-    orderStorage.get(date).success(function (data) {
+    orderStorage.get($scope.orderDate).success(function (data) {
         $scope.orders = data;
         for (var i = 0; i < $scope.orders.length; i++) {
             $scope.orders[i].pizzas = JSON.parse($scope.orders[i].pizzas);
         }
+	setInterval(function () {
+	    orderStorage.get($scope.orderDate).success(function (data) {
+	        $scope.orders = data;
+	        for (var i = 0; i < $scope.orders.length; i++) {
+	            $scope.orders[i].pizzas = JSON.parse($scope.orders[i].pizzas);
+		}
+            });
+	}, 3000);
     });
-    setInterval(function () {
-        orderStorage.get().success(function (data) {
-            $scope.orders = data;
-            for (var i = 0; i < $scope.orders.length; i++) {
-                $scope.orders[i].pizzas = JSON.parse($scope.orders[i].pizzas);
-            }
-        });
-    }, 3000);
+
+    $scope.checkTimeFormat = function ($event) {
+        if ($scope.newOrderTime.length == 3 && $event.keyCode == 8) {
+           $scope.newOrderTime = $scope.newOrderTime[0];
+        } else if (isNaN($scope.newOrderTime.substring($scope.newOrderTime.length - 1, $scope.newOrderTime.length))) {
+           $scope.newOrderTime = $scope.newOrderTime.substring(0, $scope.newOrderTime.length - 1);
+        } else if ($scope.newOrderTime.length == 2) {
+           $scope.newOrderTime = $scope.newOrderTime + ":";
+        } else if ($scope.newOrderTime.length > 5) {
+           $scope.newOrderTime = $scope.newOrderTime.substring(0, $scope.newOrderTime.length - 1);
+        }
+    }
 
     $scope.addOrder = function () {
         try {
+            if ($scope.newOrderPhone.length != 0 || ($scope.newOrderPhone.length > 0 && $scope.newOrderPhone.length != 10)) {
+                throw "Phone number is not correct"
+            }
             var pizzas = $scope.newOrderFlavour.trim().split(',');
             for (var i = 0; i < pizzas.length; i++) {
                 var pizza = {};
@@ -46,13 +63,22 @@ sndApp.controller('orderCtrl', ['$scope', '$filter', 'orderStorage', function ($
                 done: false,
             };
         } catch (e) {
-            alert("Please complete necesary forms");
+	    alert(e);
             return;
         }
         orderStorage.post(newOrder).success(function (data) {
             $scope.newOrder = '';
             $scope.orders = data;
+
+	    $scope.newOrderTime = "";
+	    $scope.newOrderPieces = "";
+	    $scope.newOrderFlavour = "";
+	    $scope.newOrderName = "";
+	    $scope.newOrderPhone = "";
+	    $scope.newOrderAddress = "";
+	    $scope.newOrderNote = "";
         });
+
     };
 
     $scope.removeOrder = function (order) {
@@ -77,14 +103,14 @@ sndApp.controller('orderCtrl', ['$scope', '$filter', 'orderStorage', function ($
             newOrder.done = true;
         }
         newOrder.pizzas = JSON.stringify(newOrder.pizzas);
-        console.log(newOrder);
-        orderStorage.put(newOrder._id, newOrder);
-        orderStorage.get().success(function (data) {
-            $scope.orders = data;
-            for (var i = 0; i < $scope.orders.length; i++) {
-                $scope.orders[i].pizzas = JSON.parse($scope.orders[i].pizzas);
-            }
-        });
+        orderStorage.put(newOrder._id, newOrder).success(function() {
+		orderStorage.get().success(function (data) {
+		    $scope.orders = data;
+		    for (var i = 0; i < $scope.orders.length; i++) {
+			$scope.orders[i].pizzas = JSON.parse($scope.orders[i].pizzas);
+		    }
+		})
+	});
     }
 }]);
 
@@ -93,7 +119,6 @@ sndApp.filter('dateFilter', [function () {
         var result = {};
 
         angular.forEach(machines, function (machine, key) {
-            console.log(myParam);
             if (machine.date == myParam) {
                 result[key] = machine;
             }
@@ -101,3 +126,17 @@ sndApp.filter('dateFilter', [function () {
         return result;
     };
 }]);
+
+sndApp.filter('toArray', function () {
+    'use strict';
+
+    return function (obj) {
+        if (!(obj instanceof Object)) {
+            return obj;
+        }
+
+        return Object.keys(obj).filter(function(key){if(key.charAt(0) !== "$") {return key;}}).map(function (key) {
+            return Object.defineProperty(obj[key], '$key', {__proto__: null, value: key});
+        });
+    };
+});

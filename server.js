@@ -9,7 +9,7 @@ var argv = require('optimist').argv;
 
 // configuration =================
 
-mongoose.connect('mongodb://' + argv.be_ip + ':27017/my_database');
+mongoose.connect('mongodb://' + argv.be_ip + ':80/my_database');
 
 app.use('/js', express.static(__dirname + '/js'));
 app.use('/css', express.static(__dirname + '/css'));
@@ -47,7 +47,14 @@ var Order = mongoose.model('Order', {
 // get all orders
 app.get('/api/orders', function (req, res) {
     // use mongoose to get all orders in the database
-    Order.find(function (err, orders) {
+    var d = new Date();
+    var orderDate = req.param('date') !== undefined ? req.param('date') :
+		     d.getFullYear()
+                     + "/" + ((d.getMonth() + 1) < 10 ? '0':'') + (d.getMonth() + 1)
+                     + "/" + (d.getDate() + 1 < 10 ? '0':'') + d.getDate();
+
+    Order.find({ date: orderDate }, function (err, orders) {
+    //Order.find(function (err, orders) {
         // if there is an error retrieving, send the error. nothing after res.send(err) will execute
         if (err) {
             res.send(err);

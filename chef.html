@@ -14,10 +14,10 @@
 </head>
 
 <body ng-controller="orderCtrl">
-    <div class="order" ng-repeat="order in orders | orderBy : 'time' |filter:{done:false}">
+    <div class="order" ng-repeat="order in orders | orderBy:'time'| dateFilter:orderDate | toArray:false | filter:{done:false} ">
         <div class="info">
             <span class="time">{{order.time}}</span>
-            <span class="piece">{{order.pieces}} P</span>
+            <span class="piece">{{order.pieces}}</span>
             <span class="delivery" ng-show="order.address!=''">/D</span>
             <span class="half-box" ng-show="order.halfBox">/H</span>
         </div>
